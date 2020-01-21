@@ -1,0 +1,105 @@
+---
+- name: Creating VM With Whole Setup
+  hosts: localhost
+  gather_facts: true
+  vars:
+    var_resourse_group_name: AshishRM
+    var_resourse_group_location: westus
+    var_resourse_group_tags: testing
+    var_resourse_group_tags_delete: never
+    var_storage_name: a1g0179767eyu4
+    var_storage_account_type: Standard_LRS
+    var_virtual_network_name: ashishVN
+    var_virtual_network_address_prefixes: "10.0.0.0/16"
+    var_subnet_name: AshishSubnet
+    var_subnet_address_prefix: "10.0.0.0/23"
+    var_public_ip_name: AshishPublicIP
+    var_public_ip_allcation_method: Static
+    var_security_group_name: AshishSecGroup
+    var_security_group_rule_name: SSH
+    var_security_group_rule_protocol: Tcp
+    var_security_group_rule_destination_port_range: "22"
+    var_security_group_rule_access: Allow
+    var_security_group_rule_priority: "101"
+    var_security_group_rule_direction: Inbound
+    var_nic_name: AshishNIC
+    var_virtual_machine_name: ashish-vm
+    var_virtual_machine_size: Standard_D1
+    var_virtual_machine_username: ashish
+    var_virtual_machine_password: Ashish@123
+    var_virtual_machine_image_offer_name: CentOS
+    var_virtual_machine_image_publisher: OpenLogic
+    var_virtual_machine_image_sku: "7.1"
+    var_virtual_machine_image_version: latest
+  tasks:
+    - name: Create a resource group
+      azure_rm_resourcegroup:
+        name: "{{ var_resourse_group_name }}"
+        location: "{{ var_resourse_group_location }}"
+        tags:
+          testing: "{{ var_resourse_group_tags }}"
+          delete: "{{ var_resourse_group_tags_delete }}"
+
+    - name: Create storage account
+      azure_rm_storageaccount:
+        resource_group: "{{ var_resourse_group_name }}"
+        name: "{{ var_storage_name }}"
+        account_type: "{{ var_storage_account_type }}"
+
+    - name: Create virtual network
+      azure_rm_virtualnetwork:
+        resource_group: "{{ var_resourse_group_name }}"
+        name: "{{ var_virtual_network_name }}"
+        address_prefixes: "{{ var_virtual_network_address_prefixes }}"
+
+    - name: Add subnet
+      azure_rm_subnet:
+        resource_group: "{{ var_resourse_group_name }}"
+        name: "{{ var_subnet_name }}"
+        address_prefix: "{{ var_virtual_network_address_prefixes }}"
+        virtual_network: "{{ var_virtual_network_name }}"
+
+    - name: Create public ip
+      azure_rm_publicipaddress:
+        resource_group: "{{ var_resourse_group_name }}"
+        allocation_method: "{{ var_public_ip_allcation_method }}"
+        name: "{{ var_public_ip_name }}"
+
+    - name: Create security group that allows SSH
+      azure_rm_securitygroup:
+        resource_group: "{{ var_resourse_group_name }}"
+        name: "{{ var_security_group_name }}"
+        rules:
+          - name: "{{ var_security_group_rule_name }}"
+            protocol: "{{ var_security_group_rule_protocol }}"
+            destination_port_range: "{{ var_security_group_rule_destination_port_range }}"
+            access: "{{ var_security_group_rule_access }}"
+            priority: "{{ var_security_group_rule_priority }}"
+            direction: "{{ var_security_group_rule_direction }}"
+
+    - name: Creating NIC
+      azure_rm_networkinterface:
+        resource_group: "{{ var_resourse_group_name }}"
+        name: "{{ var_nic_name }}"
+        virtual_network: "{{ var_virtual_network_name }}"
+        subnet: "{{ var_subnet_name }}"
+        public_ip_name: "{{ var_public_ip_name }}"
+        security_group: "{{ var_security_group_name }}"
+
+    - name: Create virtual machine
+      azure_rm_virtualmachine:
+        resource_group: "{{ var_resourse_group_name }}"
+        name: "{{ var_virtual_machine_name }}"
+        vm_size: "{{ var_virtual_machine_size }}"
+        storage_account: "{{ var_storage_name }}"
+        storage_container: "{{ var_virtual_machine_name }}"
+        storage_blob: "{{var_virtual_machine_name}}.vhd"
+        admin_username: "{{ var_virtual_machine_username }}"
+        admin_password: "{{ var_virtual_machine_password }}"
+        network_interfaces: "{{ var_nic_name }}"
+        image:
+          offer: "{{ var_virtual_machine_image_offer_name }}"
+          publisher: "{{ var_virtual_machine_image_publisher }}"
+          sku: "{{ var_virtual_machine_image_sku }}"
+          version: "{{ var_virtual_machine_image_version }}"
+...

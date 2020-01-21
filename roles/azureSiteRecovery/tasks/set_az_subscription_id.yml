@@ -1,0 +1,4 @@
+---
+- name: Set azure subscription id
+  raw: Set-AzContext -SubscriptionId "az_subscriptionId"
+...

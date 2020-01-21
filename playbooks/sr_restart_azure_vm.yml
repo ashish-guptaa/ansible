@@ -1,0 +1,47 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: false
+  vars_prompt:
+    - name: "rmName"
+      prompt: "Enter Resourse Manager Name"
+      private: no
+    - name: "vmName"
+      prompt: "Enter Virtual Machine Name"
+      private: no
+    - name: "runTask"
+      prompt: "Type 1 To Power off the VM, Type 2 to Dallocate the VM, Type 3 to Power On the VM, Type 4 to Restart the VM" 
+      private: no
+  tasks:
+    - name: Power Off
+      raw: "az vm stop -g {{ rmName }} -n {{ vmName }}"
+#      azure_rm_virtualmachine:
+#        resource_group: "{{ rmName }}"
+#        name: "{{ vmName }}"
+#        started: no
+      when: runTask == "1"
+
+    - name: Deallocate
+      raw: "az vm deallocate -g {{ rmName }} -n {{ vmName }}"
+#      azure_rm_virtualmachine:
+#        resource_group: "{{ rmName }}"
+#        name: "{{ vmName }}"
+#        allocated: no
+      when: runTask == "2"
+
+    - name: Power On
+      raw: "az vm start -g {{ rmName }} -n {{ vmName }}"
+#      azure_rm_virtualmachine:
+#        resource_group: "{{ rmName }}"
+#        name: "{{ vmName }}"
+#        subscription_id : "21f669a3-2fb9-4976-b0e3-35f3f500b6e3"
+      when: runTask == "3"
+
+    - name: Restart
+      raw: "az vm restart -g {{ rmName }} -n {{ vmName }}"
+#      azure_rm_virtualmachine:
+#        resource_group: "{{ rmName }}"
+#        name: "{{ vmName }}"
+#        restarted: yes
+      when: runTask == "4"
+...

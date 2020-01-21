@@ -1,0 +1,14 @@
+- vars_prompt:
+    - name: "az_subscriptionId"
+      prompt: "Enter your azure subscription id you want to work with:"
+      private: no
+
+    - name:  "az_rg_name"
+      prompt: "Enter the source resource group name:"
+      private: no
+
+    - name: "az_vm_name"
+      prompt: "Enter the source VM name:"
+      private: no
+
+    - name: ""

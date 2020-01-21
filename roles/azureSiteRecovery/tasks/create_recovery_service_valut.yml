@@ -1,0 +1,15 @@
+- name: Create a resource group for the recovery service vault in the recovery azure region
+  raw: New-AzResourceGroup -Name "{{ az_asr_rg_name }}" -Location "{{ az_asr_rg_location }}"
+
+- name: Create a new Recovery services vault in the recovery region
+  raw: New-AzRecoveryServicesVault -Name "{{ az_asr_rg_name }}Vault" -ResourceGroupName "{{ az_asr_rg_name }}" -Location "{{ az_asr_rg_location }}"
+  register: asr_vault
+
+- name: Setting the vault context
+  raw: Set-AzRecoveryServicesAsrVaultContext -Vault "{{ asr_vault }}"
+
+- name: Delete the downloaded vault settings file
+  raw: Remove-Item -Path $Vaultsettingsfile.FilePath
+
+- name: Set the vault context for the PowerShell session.
+  raw: Set-AzRecoveryServicesAsrVaultContext -Vault "{{ asr_vault }}"
