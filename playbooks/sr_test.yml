@@ -1,0 +1,8 @@
+---
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Nothing
+      debug:
+        msg: "I am in test file"
+...
