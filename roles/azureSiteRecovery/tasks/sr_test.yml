@@ -8,16 +8,15 @@
         name: AppVM
       register: var_vm_info
 
-    - raw: Get-AzVM -ResourceGroupName "ASRgroup" -Name "AppVM"
-      register: var_vm_info
+#    - raw: Get-AzVM -ResourceGroupName "ASRgroup" -Name "AppVM"
+#      register: var_vm_info
       
     - debug:
-        msg: "{{ var_vm_info }}"
+        msg: "{{ var_vm_info.location }}"
 
     - debug:
         msg: "{{ var_vm_info.vms[data_disks] }}"
     
     - debug:
         msg: "{{ var_vm_info.os_disk_caching }}"
-
 ...
