@@ -5,7 +5,7 @@
   raw: New-AzRecoveryServicesVault -Name "{{ az_asr_rg_name }}Vault" -ResourceGroupName "{{ az_asr_rg_name }}" -Location "{{ az_asr_rg_location }}"
   register: asr_vault
 
-- name: Setting the vault context
+- name: Set the vault context
   raw: Set-AzRecoveryServicesAsrVaultContext -Vault "{{ asr_vault }}"
 
 - name: Delete the downloaded vault settings file

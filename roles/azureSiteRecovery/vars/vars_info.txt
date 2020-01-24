@@ -1,0 +1,16 @@
+az_subscriptionId			Azure subscriptionId to work with
+az_rg_name					Source resource group
+az_vm_name					Source Virtual machine
+var_vm_info					Source Virtual machine info
+
+az_asr_rg_name				Azure Site Recovery resource group name
+az_asr_rg_location			Azure Site Recovery resource group location
+az_asr_vm_name				Azure Site Recovery Virtual machine
+asr_vault					Output of "Create a new Recovery services vault in the recovery region"
+
+
+Below is the sequence of yaml files to perform ASR.
+1. set_user_value.yml
+2. set_az_subscription_id.yml
+3. get_vm_info.yml
+4. create_recovery_service_valut.yml

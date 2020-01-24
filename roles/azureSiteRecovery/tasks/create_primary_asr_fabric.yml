@@ -1,2 +1,3 @@
+#Prepare the vault to start replicating Azure virtual machines
 - name: Create Primary ASR fabric
   raw: New-AzRecoveryServicesAsrFabric -Azure -Location 'East US'  -Name "asr_-EastUS"

@@ -1,18 +1,23 @@
 ---
 - hosts: localhost
   gather_facts: false
+  become_user: ashish
   tasks:
     - name: Get details of virtual machine to be replicated
       azure_rm_virtualmachine_info:
         resource_group: ASRgroup
         name: AppVM
-      register: var_vm_info
+      register: var_vm_inf
 
-#    - raw: Get-AzVM -ResourceGroupName "ASRgroup" -Name "AppVM"
-#      register: var_vm_info
+ #   - raw: Get-AzVM -ResourceGroupName "ASRgroup" -Name "AppVM"
+ #     register: var_vm_info
       
+    - shell: |
+        spawn Get-AzVM -ResourceGroupName "ASRgroup" -Name "AppVM"
+        exit 0
+
     - debug:
-        msg: "{{ var_vm_info.location }}"
+        msg: "{{ var_vm_info.stdout.location }}"
 
     - debug:
         msg: "{{ var_vm_info.vms[data_disks] }}"
