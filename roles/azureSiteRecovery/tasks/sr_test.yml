@@ -9,12 +9,12 @@
         name: AppVM
       register: var_vm_inf
 
- #   - raw: Get-AzVM -ResourceGroupName "ASRgroup" -Name "AppVM"
- #     register: var_vm_info
+    - raw: Get-AzVM -ResourceGroupName "ASRgroup" -Name "AppVM"
+      register: var_vm_info
       
-    - shell: |
-        spawn Get-AzVM -ResourceGroupName "ASRgroup" -Name "AppVM"
-        exit 0
+ #   - shell: |
+ #       spawn Get-AzVM -ResourceGroupName "ASRgroup" -Name "AppVM"
+ #       exit 0
 
     - debug:
         msg: "{{ var_vm_info.stdout.location }}"
